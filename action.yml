@@ -1,0 +1,25 @@
+name: 'actions-bot'
+description: 'Configure `git` to use GitHub Actions bot identity'
+
+outputs:
+  username:
+    description: Bot's username
+    value: ${{ steps.bot.outputs.username }}
+  email:
+    description: Bot's email
+    value: ${{ steps.bot.outputs.email }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: bot
+      name: 'Configure git'
+      shell: bash
+      # https://github.com/actions/checkout/pull/1184
+      run: |
+        USERNAME='github-actions[bot]'
+        EMAIL='41898282+github-actions[bot]@users.noreply.github.com'
+        git config --local user.name "$USERNAME"
+        git config --local user.email "$EMAIL"
+        echo "username=$USERNAME" >> $GITHUB_OUTPUT
+        echo "email=$EMAIL" >> $GITHUB_OUTPUT

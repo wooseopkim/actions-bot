@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: bot
+        uses: ./
+      - run: |
+          COMITTER=$(git var GIT_COMMITTER_IDENT| awk '{ NF-=2; print }')
+          EXPECTED='github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
+          if [[ "$COMITTER" !== "$EXPECTED" ]]; then
+            exit 1
+          fi
+      - if: ${{ steps.bot.outputs.username != 'github-actions[bot]' }}
+        run: exit 1
+      - if: ${{ steps.bot.outputs.email != '41898282+github-actions[bot]@users.noreply.github.com' }}
+        run: exit 1
