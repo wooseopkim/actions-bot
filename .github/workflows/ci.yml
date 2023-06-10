@@ -15,7 +15,7 @@ jobs:
       - run: |
           COMITTER=$(git var GIT_COMMITTER_IDENT| awk '{ NF-=2; print }')
           EXPECTED='github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
-          if [[ "$COMITTER" !== "$EXPECTED" ]]; then
+          if [[ "$COMITTER" != "$EXPECTED" ]]; then
             exit 1
           fi
       - if: ${{ steps.bot.outputs.username != 'github-actions[bot]' }}
